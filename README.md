@@ -1,147 +1,171 @@
-# Spring Boot Project Template - Claude Code Rules
+# Claude Code Templates for Development Projects
 
-> **Generic rules and best practices template for Spring Boot projects with Java**
+This directory contains reusable Claude Code rule templates for different types of projects.
 
-This template defines conventions, best practices, and development standards for Spring Boot projects.
+## Available Templates
 
-## 🚀 How to Use This Template
+### Spring Boot Template (`springboot/`)
 
-### 1. Copy the Template to Your Project
+Comprehensive rules and best practices for Spring Boot projects with Java.
+
+**Includes:**
+- Architecture guidelines (layers, structure, naming)
+- Backend best practices (entities, services, controllers, DTOs, repositories)
+- Security setup (JWT, authorization, CORS)
+- Error handling patterns
+- Testing conventions (unit, integration)
+- Configuration management
+- API documentation (OpenAPI/Swagger)
+- **Complete Git/GitHub workflow** (branching, commits, PRs, CI/CD)
+- 47 best practices
+- Feature implementation checklist
+
+**Compatible with:**
+- Spring Boot 3.x
+- Java 17+
+- MySQL/PostgreSQL
+- Maven
+
+**How to use:**
 ```bash
-# From this repository
-cp -r .claude-templates/springboot/.claude /path/to/your/project/
+# Copy to your new Spring Boot project
+cp -r springboot/ /path/to/your/project/.claude/
 
-# Or clone and copy
-git clone <repo-url>
-cp -r <repo>/.claude-templates/springboot/.claude /path/to/your/project/
+# See USAGE.md for detailed instructions
+cat springboot/USAGE.md
 ```
 
-### 2. Customize for Your Project
-- Edit `README.md` to include project-specific information
-- Add additional folders for specific features (e.g., `iot/`, `messaging/`, etc.)
-- Update the tech stack in README.md according to your project
-- Adjust rules based on your domain's particular needs
+## AI Agents for Spring Boot
 
-### 3. Configure Git Workflow (Optional)
-- Review `git-workflow/github-workflow.md` to configure your workflow
-- Adjust branching rules according to your team
-- Configure hooks if needed in `settings.local.json`
+**NEW**: Specialized AI agents to accelerate development! (`agents/`)
 
-## 📚 Documentation Index
+Six specialized agents designed for Spring Boot projects:
 
-### 🏗️ Architecture
-- [Project Structure](architecture/project-structure.md) - Directory organization and layers
-- [Application Layers](architecture/layers.md) - Controller → Service → Repository
-- [Naming Conventions](architecture/naming-conventions.md) - File and method naming
+| Agent | Purpose |
+|-------|---------|
+| Code Reviewer | Quality, security, and best practices validation |
+| Test Generator | Unit and integration test generation |
+| Security Auditor | OWASP Top 10 vulnerability scanning |
+| API Designer | RESTful API design and implementation |
+| Entity Designer | JPA entity modeling with relationships |
+| Refactor Assistant | Code quality improvements |
 
-### 💻 Backend
-- [Entities (JPA)](backend/entities.md) - Database models, Lombok, relationships
-- [Repositories](backend/repositories.md) - Data access with Spring Data JPA
-- [Services](backend/services.md) - Business logic, transactions, mappers
-- [Controllers](backend/controllers.md) - REST endpoints, HTTP codes, documentation
-- [DTOs](backend/dtos.md) - Data Transfer Objects and validations
-- [Mappers](backend/mappers.md) - MapStruct and ModelMapper
+**See**: [AI Agents Guide](agents/README.md) for detailed usage.
 
-### 🔒 Security
-- [Authentication](security/authentication.md) - JWT, cookies, configuration
-- [Authorization](security/authorization.md) - Roles, @PreAuthorize
-- [CORS](security/cors.md) - Global CORS configuration
+## Purpose
 
-### ⚠️ Error Handling
-- [Custom Exceptions](error-handling/exceptions.md) - Creating specific exceptions
-- [Global Exception Handler](error-handling/global-handler.md) - Centralized @ControllerAdvice
+These templates provide:
 
-### 🧪 Testing
-- [Unit Tests](testing/unit-tests.md) - Mockito, @WebMvcTest, @DataJpaTest
-- [Integration Tests](testing/integration-tests.md) - @SpringBootTest, Testcontainers
-- [Testing Conventions](testing/test-conventions.md) - Naming and structure
+1. **Consistency**: Same conventions across all your projects
+2. **Quick Start**: New projects start with battle-tested rules
+3. **Onboarding**: Easy for new team members to understand project structure
+4. **Quality**: Built-in best practices from day one
+5. **AI-Powered**: Specialized agents to accelerate development
+6. **CI/CD Ready**: Includes Git workflow and GitHub Actions examples
 
-### ⚙️ Configuration
-- [Spring Profiles](configuration/profiles.md) - YAML per environment (dev, test, prod)
-- [Database](configuration/database.md) - JPA, Flyway, MySQL/PostgreSQL
-- [Dependencies](configuration/dependencies.md) - pom.xml and libraries
+## Template Structure
 
-### 📖 Documentation
-- [OpenAPI/Swagger](documentation/openapi.md) - API documentation
-- [Logging](documentation/logging.md) - SLF4J and log levels
+Each template contains:
 
-### 🔄 Git Workflow
-- [GitHub Workflow](git-workflow/github-workflow.md) - Branching, testing, PR
-- [Commit Conventions](git-workflow/commit-conventions.md) - Commit messages
-- [PR Template](git-workflow/pr-template.md) - Pull Request template
-
-### ✅ Quick Guides
-- [Best Practices](best-practices.md) - Essential rules
-- [Checklist for New Features](checklist.md) - Steps to implement features
-
-## 🚀 Quick Start
-
-### Fundamental Rule
-**One public method per file** in Controllers and Services.
-
-### Basic Structure
 ```
-controllers/<resource>/
-├── Create<Resource>Controller.java → create<Resource>()
-├── Get<Resource>Controller.java → get<Resource>()
-└── Delete<Resource>Controller.java → delete<Resource>()
-
-services/<resource>/
-├── Create<Resource>Service.java → create<Resource>()
-├── Get<Resource>Service.java → get<Resource>()
-└── Delete<Resource>Service.java → delete<Resource>()
-
-repositories/<resource>/
-└── <Resource>Repository.java
-
-mappers/
-└── <Resource>Mapper.java
+template-name/
+├── README.md              # Overview and quick start
+├── USAGE.md               # Detailed usage instructions
+├── best-practices.md      # Core rules and conventions
+├── checklist.md           # Implementation checklist
+├── settings.local.json    # Claude Code settings
+├── .gitignore             # Template-specific gitignore
+├── architecture/          # Architecture docs
+├── backend/               # Backend-specific docs
+├── security/              # Security guidelines
+├── testing/               # Testing conventions
+├── configuration/         # Configuration management
+├── documentation/         # Documentation standards
+└── git-workflow/          # Git and GitHub workflow
+    ├── github-workflow.md
+    ├── commit-conventions.md
+    └── pr-template.md
 ```
 
-### Key Conventions
-- Directories in **lowercase** (user, order, product)
-- Files in **CamelCase** (CreateUserController.java)
-- API with **version** (`/api/v1/user`)
-- **No @CrossOrigin** in controllers (configure globally)
-- **No try-catch** in controllers (use @ControllerAdvice)
-- **MapStruct** for mapping (not manual)
-- **@Transactional(readOnly=true)** for reads
-- **Custom exceptions** with @ResponseStatus
+## AI Agents Structure
 
-## 🛠️ Base Tech Stack
+```
+agents/
+├── README.md                  # Agents guide and usage
+├── code-reviewer.md           # Quality and security reviewer
+├── test-generator.md          # Test generation specialist
+├── security-auditor.md        # Security vulnerability scanner
+├── api-designer.md            # RESTful API designer
+├── entity-designer.md         # JPA entity designer
+└── refactor-assistant.md      # Code refactoring expert
+```
 
-- **Framework**: Spring Boot 3.x
-- **Language**: Java 17+
-- **Database**: MySQL/PostgreSQL
-- **ORM**: JPA/Hibernate
-- **Security**: Spring Security + JWT
-- **Mapping**: MapStruct
-- **Testing**: JUnit 5, Mockito, Testcontainers
-- **Documentation**: SpringDoc OpenAPI
+## Adding a New Template
 
-## 🎯 Template Philosophy
+1. Create a new directory with the template name
+2. Follow the structure above
+3. Write comprehensive documentation in English
+4. Include USAGE.md with clear instructions
+5. Add examples and code snippets
+6. Test in a real project before committing
 
-This template is designed for:
+## Using Templates from GitHub
 
-1. **Consistency**: All Spring Boot projects follow the same conventions
-2. **Scalability**: Structure that scales from small microservices to large applications
-3. **Maintainability**: Easy to understand and modify code
-4. **Testability**: Architecture that facilitates unit and integration testing
-5. **Security**: Security best practices incorporated from the start
+```bash
+# Clone the repository
+git clone https://github.com/Josansanchez/claude-code-java-templates.git
 
-## 📝 Customization for Your Project
+# Copy desired template to your project
+cp -r claude-code-java-templates/springboot /path/to/your/project/.claude
 
-1. **Add Specific Features**: Create additional folders in `.claude/` for specific technologies (e.g., `messaging/`, `cache/`, `iot/`)
-2. **Adapt Examples**: Replace generic examples with examples from your domain
-3. **Configure Hooks**: Define validation hooks in `settings.local.json`
-4. **Document Specifics**: Add documentation about unique architectural decisions in your project
+# Copy AI agents
+cp -r claude-code-java-templates/agents /path/to/your/project/
 
-## 🤝 Contributions
+# Or use degit for cleaner copy (without git history)
+npx degit Josansanchez/claude-code-java-templates/springboot /path/to/your/project/.claude
+```
 
-If you improve these rules, consider updating the base template to benefit other projects.
+## Contributing
+
+Improvements to templates are welcome:
+
+1. Use the template in a real project
+2. Identify improvements or missing documentation
+3. Update the template
+4. Test thoroughly
+5. Submit a pull request
+
+## Template Versions
+
+### Spring Boot Template
+- **Version**: 2.0.0
+- **Last Updated**: 2025-01-02
+- **Compatible with**: Spring Boot 3.x, Java 17+
+- **New**: AI Agents for accelerated development
+
+## Best Practices for Templates
+
+1. **Keep it Generic**: Use generic examples (User, Order, Product) instead of domain-specific terms
+2. **Complete Documentation**: Every feature should be well-documented
+3. **Code Examples**: Include working code examples in each doc
+4. **Consistency**: Maintain consistent style across all documentation
+5. **English Only**: All documentation in English for wider adoption
+6. **Version Control**: Tag template versions and document changes
+
+## Future Templates (Ideas)
+
+- `react/` - React with TypeScript, Redux, Testing Library
+- `python-fastapi/` - FastAPI with SQLAlchemy, Pydantic
+- `nodejs-express/` - Express with TypeScript, Prisma
+- `flutter/` - Flutter mobile app development
+- `golang-gin/` - Go with Gin framework
+- `dotnet-core/` - .NET Core Web API
+
+## License
+
+MIT License - See [LICENSE](LICENSE) file for details.
 
 ---
 
-**Template Version**: 1.0.0
-**Compatible with**: Spring Boot 3.x, Java 17+
-**Last updated**: 2025-01-02
+**Maintained by**: Josansanchez
+**Repository**: https://github.com/Josansanchez/claude-code-java-templates

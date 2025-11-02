@@ -1,0 +1,7 @@
+# Settings file that might contain local configurations
+settings.local.json
+
+# Temporary files
+*.tmp
+*.bak
+*~
