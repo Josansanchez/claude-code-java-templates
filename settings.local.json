@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./mvnw test)",
+      "Bash(./mvnw clean install)",
+      "Bash(./mvnw clean install -DskipTests)",
+      "Bash(git status)",
+      "Bash(git diff)",
+      "Bash(git log --oneline -n 10)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
