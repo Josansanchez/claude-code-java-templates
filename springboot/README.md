@@ -47,6 +47,7 @@ cp -r <repo>/.claude-templates/springboot/.claude /path/to/your/project/
 - [Authentication](security/authentication.md) - JWT, cookies, configuration
 - [Authorization](security/authorization.md) - Roles, @PreAuthorize
 - [CORS](security/cors.md) - Global CORS configuration
+- [**Advanced Security**](security/advanced-security.md) - **OWASP Top 10, rate limiting, input sanitization**
 
 ### ⚠️ Error Handling
 - [Custom Exceptions](error-handling/exceptions.md) - Creating specific exceptions
@@ -59,7 +60,9 @@ cp -r <repo>/.claude-templates/springboot/.claude /path/to/your/project/
 
 ### ⚙️ Configuration
 - [Spring Profiles](configuration/profiles.md) - YAML per environment (dev, test, prod)
-- [Database](configuration/database.md) - JPA, Flyway, MySQL/PostgreSQL
+- [Database](configuration/database.md) - JPA configuration, connection pooling
+- [**Database Migrations**](configuration/database-migrations.md) - **Flyway/Liquibase, versioning, best practices**
+- [**Caching**](configuration/caching.md) - **Redis, Spring Cache, strategies, patterns**
 - [Dependencies](configuration/dependencies.md) - pom.xml and libraries
 
 ### 📖 Documentation
@@ -70,6 +73,13 @@ cp -r <repo>/.claude-templates/springboot/.claude /path/to/your/project/
 - [GitHub Workflow](git-workflow/github-workflow.md) - Branching, testing, PR
 - [Commit Conventions](git-workflow/commit-conventions.md) - Commit messages
 - [PR Template](git-workflow/pr-template.md) - Pull Request template
+
+### 🚀 Deployment
+- [**Docker**](deployment/docker.md) - **Dockerfile, docker-compose, production deployment**
+- [**Monitoring**](deployment/monitoring.md) - **Spring Actuator, Prometheus, Grafana dashboards**
+
+### 🎯 Advanced Topics
+- [**Async Processing**](advanced/async-processing.md) - **@Async, events, RabbitMQ, Kafka**
 
 ### ✅ Quick Guides
 - [Best Practices](best-practices.md) - Essential rules

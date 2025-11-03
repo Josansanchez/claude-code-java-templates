@@ -12,13 +12,18 @@ Comprehensive rules and best practices for Spring Boot projects with Java.
 - Architecture guidelines (layers, structure, naming) - **All in English**
 - Backend best practices (entities, services, controllers, DTOs, repositories)
 - **JPA Specifications** for type-safe queries (no @Query or native SQL)
-- Security setup (JWT, authorization, CORS)
+- Security setup (JWT, authorization, CORS, **OWASP Top 10, rate limiting**)
 - Error handling patterns
 - Testing conventions (unit, integration)
 - Configuration management
 - API documentation (OpenAPI/Swagger)
 - **Complete Git/GitHub workflow** (branching, commits, PRs, CI/CD)
-- **52 best practices** (updated with Specifications)
+- **Database Migrations** guide (Flyway/Liquibase with examples)
+- **Caching Strategies** (Redis, Spring Cache, patterns)
+- **Docker Deployment** (Dockerfile, docker-compose, production)
+- **Monitoring & Observability** (Actuator, Prometheus, Grafana)
+- **Async Processing** (@Async, events, messaging)
+- **54 best practices** (comprehensive coverage)
 - Feature implementation checklist
 
 **Compatible with:**
@@ -143,11 +148,17 @@ Improvements to templates are welcome:
 - **Last Updated**: 2025-11-03
 - **Compatible with**: Spring Boot 3.x, Java 17+
 - **New in 2.1.0**:
-  - All documentation in English
-  - JPA Specifications for type-safe queries
-  - 52 best practices (added 5 for Specifications)
-  - Comprehensive Specifications guide (855 lines)
-  - Improved architecture documentation
+  - ✅ All documentation in English (architecture files translated)
+  - ✅ JPA Specifications for type-safe queries (855-line comprehensive guide)
+  - ✅ **Database Migrations** (Flyway/Liquibase, 700+ lines)
+  - ✅ **Caching Strategies** (Redis, Spring Cache, 550+ lines)
+  - ✅ **Docker Deployment** (Dockerfile, docker-compose, 650+ lines)
+  - ✅ **Monitoring & Observability** (Actuator, Prometheus, Grafana, 450+ lines)
+  - ✅ **Advanced Security** (OWASP Top 10, rate limiting, XSS, 550+ lines)
+  - ✅ **Async Processing** (@Async, events, RabbitMQ, Kafka, 500+ lines)
+  - ✅ **54 best practices** (updated from 47)
+  - ✅ Reorganized structure (ready for multi-language templates)
+  - ✅ 3,850+ lines of new production-ready documentation
 
 ## Best Practices for Templates
 

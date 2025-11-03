@@ -1,6 +1,6 @@
 # Best Practices - Spring Boot Application
 
-## Comprehensive list of 52 best practices for the Spring Boot Application project.
+## Comprehensive list of 54 best practices for the Spring Boot Application project.
 
 ## Architecture and Organization (5)
 
@@ -29,78 +29,80 @@
 14. **PasswordEncoder**: ALWAYS use for encrypting passwords
 15. **Environment Variables**: For secrets in production (JWT secret, DB password)
 
-## Transactions and Database (4)
+## Transactions and Database (6)
 
 16. **@Transactional at Method Level**: NO at class level
 17. **@Transactional(readOnly = true)**: For read-only operations
 18. **Lazy Loading**: Use `FetchType.LAZY` by default in JPA relationships
-19. **Flyway**: For database migrations, NO `ddl-auto=update` in production
+19. **Database Migrations**: Use Flyway or Liquibase, NEVER `ddl-auto=update` in production
+20. **ddl-auto: validate**: In production, only validate schema (set in application-prod.yml)
+21. **Never Modify Applied Migrations**: Create new migration files, don't edit existing ones
 
 ## Database Queries with Specifications (5)
 
-20. **Use Specifications**: For complex queries, NOT `@Query` or native SQL
-21. **JpaSpecificationExecutor**: All repositories must extend this interface
-22. **Specifications Classes**: Create `*Specifications.java` for each entity in same directory as repository
-23. **Type-Safe Queries**: NO string-based JPQL or native SQL queries
-24. **Composable Specifications**: Build dynamic queries by combining specifications with `and()` and `or()`
+22. **Use Specifications**: For complex queries, NOT `@Query` or native SQL
+23. **JpaSpecificationExecutor**: All repositories must extend this interface
+24. **Specifications Classes**: Create `*Specifications.java` for each entity in same directory as repository
+25. **Type-Safe Queries**: NO string-based JPQL or native SQL queries
+26. **Composable Specifications**: Build dynamic queries by combining specifications with `and()` and `or()`
 
 ## Exception Handling (3)
 
-25. **Custom Exceptions**: With `@ResponseStatus`, NO generic `RuntimeException`
-26. **@ControllerAdvice**: Centralized handling, NO try-catch in controllers
-27. **Optional.orElseThrow()**: Use correctly for handling resources not found
+27. **Custom Exceptions**: With `@ResponseStatus`, NO generic `RuntimeException`
+28. **@ControllerAdvice**: Centralized handling, NO try-catch in controllers
+29. **Optional.orElseThrow()**: Use correctly for handling resources not found
 
 ## Mapping (2)
 
-28. **MapStruct or ModelMapper**: For entity/DTO mapping, NO manual mapping
-29. **Mapper Components**: Create `@Component` or `@Mapper` reusable
+30. **MapStruct or ModelMapper**: For entity/DTO mapping, NO manual mapping
+31. **Mapper Components**: Create `@Component` or `@Mapper` reusable
 
 ## HTTP Codes (3)
 
-30. **201 Created**: For successful POST (with `Location` header)
-31. **204 No Content**: For DELETE without response body
-32. **ResponseEntity Appropriate**: Use correct HTTP codes (200, 201, 204, 400, 404, etc.)
+32. **201 Created**: For successful POST (with `Location` header)
+33. **204 No Content**: For DELETE without response body
+34. **ResponseEntity Appropriate**: Use correct HTTP codes (200, 201, 204, 400, 404, etc.)
 
 ## Testing (5)
 
-33. **@WebMvcTest**: For controller tests (without full context)
-34. **@DataJpaTest**: For repository tests
-35. **Mockito**: For service unit tests
-36. **@SpringBootTest**: Only for complete integration tests
-37. **Minimum 80% Coverage**: Focus on critical business logic
+35. **@WebMvcTest**: For controller tests (without full context)
+36. **@DataJpaTest**: For repository tests
+37. **Mockito**: For service unit tests
+38. **@SpringBootTest**: Only for complete integration tests
+39. **Minimum 80% Coverage**: Focus on critical business logic
 
 ## Documentation (2)
 
-38. **OpenAPI/Swagger**: Document API with `@Operation`, `@ApiResponses`
-39. **Swagger UI**: Accessible at `/swagger-ui.html`
+40. **OpenAPI/Swagger**: Document API with `@Operation`, `@ApiResponses`
+41. **Swagger UI**: Accessible at `/swagger-ui.html`
 
 ## Logging (2)
 
-40. **@Slf4j from Lombok**: For logging
-41. **Appropriate Levels**: INFO, DEBUG, ERROR according to environment
+42. **@Slf4j from Lombok**: For logging
+43. **Appropriate Levels**: INFO, DEBUG, ERROR according to environment
 
 ## Lombok (4)
 
-42. **NO @Data on Entities**: With JPA relationships (use `@Getter`, `@Setter`, `@Builder`)
-43. **@Data on DTOs**: Without relationships
-44. **@ToString(exclude)**: Exclude relationships to avoid lazy loading issues
-45. **@EqualsAndHashCode(of = "id")**: Only by ID in entities
+44. **NO @Data on Entities**: With JPA relationships (use `@Getter`, `@Setter`, `@Builder`)
+45. **@Data on DTOs**: Without relationships
+46. **@ToString(exclude)**: Exclude relationships to avoid lazy loading issues
+47. **@EqualsAndHashCode(of = "id")**: Only by ID in entities
 
 ## Configuration (3)
 
-46. **YAML instead of Properties**: For better readability
-47. **Profiles by Environment**: dev, test, prod
-48. **NO Serializable**: Unless really necessary (distributed cache)
+48. **YAML instead of Properties**: For better readability
+49. **Profiles by Environment**: dev, test, prod
+50. **NO Serializable**: Unless really necessary (distributed cache)
 
 ## Pagination (2)
 
-49. **Pageable**: For GET ALL operations with pagination
-50. **Page<DTO>**: Return instead of List for large datasets
+51. **Pageable**: For GET ALL operations with pagination
+52. **Page<DTO>**: Return instead of List for large datasets
 
 ## Private Methods (2)
 
-51. **Allowed for Auxiliary Logic**: Validations, code generation, etc.
-52. **NO for Mapping**: Use Mapper component
+53. **Allowed for Auxiliary Logic**: Validations, code generation, etc.
+54. **NO for Mapping**: Use Mapper component
 
 ---
 
@@ -134,7 +136,9 @@
 - YAML configuration files
 - Profiles per environment (dev, test, prod)
 - Pageable for GET ALL
-- Flyway for database migrations
+- **Flyway/Liquibase for database migrations**
+- **ddl-auto: validate in production**
+- **Version-controlled schema changes**
 
 ### DON'T ❌
 - Multiple public methods per file
@@ -144,7 +148,9 @@
 - `@CrossOrigin` on controllers
 - Hardcoded secrets
 - `@Transactional` at class level
-- `ddl-auto=update` in production
+- **ddl-auto=update in production**
+- **ddl-auto=create or create-drop in production**
+- **Modify existing migration files after applying**
 - **@Query annotations (use Specifications)**
 - **Native SQL queries (use Specifications)**
 - **JPQL string queries (use Specifications)**
