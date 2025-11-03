@@ -1,6 +1,6 @@
 # Best Practices - Spring Boot Application
 
-## Comprehensive list of 47 best practices for the Spring Boot Application project.
+## Comprehensive list of 52 best practices for the Spring Boot Application project.
 
 ## Architecture and Organization (5)
 
@@ -36,63 +36,71 @@
 18. **Lazy Loading**: Use `FetchType.LAZY` by default in JPA relationships
 19. **Flyway**: For database migrations, NO `ddl-auto=update` in production
 
+## Database Queries with Specifications (5)
+
+20. **Use Specifications**: For complex queries, NOT `@Query` or native SQL
+21. **JpaSpecificationExecutor**: All repositories must extend this interface
+22. **Specifications Classes**: Create `*Specifications.java` for each entity in same directory as repository
+23. **Type-Safe Queries**: NO string-based JPQL or native SQL queries
+24. **Composable Specifications**: Build dynamic queries by combining specifications with `and()` and `or()`
+
 ## Exception Handling (3)
 
-20. **Custom Exceptions**: With `@ResponseStatus`, NO generic `RuntimeException`
-21. **@ControllerAdvice**: Centralized handling, NO try-catch in controllers
-22. **Optional.orElseThrow()**: Use correctly for handling resources not found
+25. **Custom Exceptions**: With `@ResponseStatus`, NO generic `RuntimeException`
+26. **@ControllerAdvice**: Centralized handling, NO try-catch in controllers
+27. **Optional.orElseThrow()**: Use correctly for handling resources not found
 
 ## Mapping (2)
 
-23. **MapStruct or ModelMapper**: For entity/DTO mapping, NO manual mapping
-24. **Mapper Components**: Create `@Component` or `@Mapper` reusable
+28. **MapStruct or ModelMapper**: For entity/DTO mapping, NO manual mapping
+29. **Mapper Components**: Create `@Component` or `@Mapper` reusable
 
 ## HTTP Codes (3)
 
-25. **201 Created**: For successful POST (with `Location` header)
-26. **204 No Content**: For DELETE without response body
-27. **ResponseEntity Appropriate**: Use correct HTTP codes (200, 201, 204, 400, 404, etc.)
+30. **201 Created**: For successful POST (with `Location` header)
+31. **204 No Content**: For DELETE without response body
+32. **ResponseEntity Appropriate**: Use correct HTTP codes (200, 201, 204, 400, 404, etc.)
 
 ## Testing (5)
 
-28. **@WebMvcTest**: For controller tests (without full context)
-29. **@DataJpaTest**: For repository tests
-30. **Mockito**: For service unit tests
-31. **@SpringBootTest**: Only for complete integration tests
-32. **Minimum 80% Coverage**: Focus on critical business logic
+33. **@WebMvcTest**: For controller tests (without full context)
+34. **@DataJpaTest**: For repository tests
+35. **Mockito**: For service unit tests
+36. **@SpringBootTest**: Only for complete integration tests
+37. **Minimum 80% Coverage**: Focus on critical business logic
 
 ## Documentation (2)
 
-33. **OpenAPI/Swagger**: Document API with `@Operation`, `@ApiResponses`
-34. **Swagger UI**: Accessible at `/swagger-ui.html`
+38. **OpenAPI/Swagger**: Document API with `@Operation`, `@ApiResponses`
+39. **Swagger UI**: Accessible at `/swagger-ui.html`
 
 ## Logging (2)
 
-35. **@Slf4j from Lombok**: For logging
-36. **Appropriate Levels**: INFO, DEBUG, ERROR according to environment
+40. **@Slf4j from Lombok**: For logging
+41. **Appropriate Levels**: INFO, DEBUG, ERROR according to environment
 
 ## Lombok (4)
 
-37. **NO @Data on Entities**: With JPA relationships (use `@Getter`, `@Setter`, `@Builder`)
-38. **@Data on DTOs**: Without relationships
-39. **@ToString(exclude)**: Exclude relationships to avoid lazy loading issues
-40. **@EqualsAndHashCode(of = "id")**: Only by ID in entities
+42. **NO @Data on Entities**: With JPA relationships (use `@Getter`, `@Setter`, `@Builder`)
+43. **@Data on DTOs**: Without relationships
+44. **@ToString(exclude)**: Exclude relationships to avoid lazy loading issues
+45. **@EqualsAndHashCode(of = "id")**: Only by ID in entities
 
 ## Configuration (3)
 
-41. **YAML instead of Properties**: For better readability
-42. **Profiles by Environment**: dev, test, prod
-43. **NO Serializable**: Unless really necessary (distributed cache)
+46. **YAML instead of Properties**: For better readability
+47. **Profiles by Environment**: dev, test, prod
+48. **NO Serializable**: Unless really necessary (distributed cache)
 
 ## Pagination (2)
 
-44. **Pageable**: For GET ALL operations with pagination
-45. **Page<DTO>**: Return instead of List for large datasets
+49. **Pageable**: For GET ALL operations with pagination
+50. **Page<DTO>**: Return instead of List for large datasets
 
 ## Private Methods (2)
 
-46. **Allowed for Auxiliary Logic**: Validations, code generation, etc.
-47. **NO for Mapping**: Use Mapper component
+51. **Allowed for Auxiliary Logic**: Validations, code generation, etc.
+52. **NO for Mapping**: Use Mapper component
 
 ---
 
@@ -108,6 +116,10 @@
 - Environment variables for secrets
 - `@Transactional` at method level
 - `@Transactional(readOnly = true)` for reads
+- **JPA Specifications for complex queries**
+- **Extend JpaSpecificationExecutor in repositories**
+- **Create *Specifications.java classes**
+- **Composable and type-safe queries**
 - Custom exceptions with `@ResponseStatus`
 - `@ControllerAdvice` for error handling
 - MapStruct/ModelMapper for mapping
@@ -133,6 +145,9 @@
 - Hardcoded secrets
 - `@Transactional` at class level
 - `ddl-auto=update` in production
+- **@Query annotations (use Specifications)**
+- **Native SQL queries (use Specifications)**
+- **JPQL string queries (use Specifications)**
 - Generic `RuntimeException`
 - try-catch in controllers
 - Manual mapping in services
@@ -145,4 +160,6 @@
 
 ## Related Documentation
 - See [checklist.md](./checklist.md) for feature implementation checklist
+- See [backend/repositories.md](./backend/repositories.md) for repository patterns
+- See [backend/specifications.md](./backend/specifications.md) for detailed Specifications guide
 - See [setup.md](./setup.md) for complete development rules

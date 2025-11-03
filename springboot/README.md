@@ -37,6 +37,7 @@ cp -r <repo>/.claude-templates/springboot/.claude /path/to/your/project/
 ### 💻 Backend
 - [Entities (JPA)](backend/entities.md) - Database models, Lombok, relationships
 - [Repositories](backend/repositories.md) - Data access with Spring Data JPA
+- [**Specifications**](backend/specifications.md) - **Type-safe queries, composable patterns**
 - [Services](backend/services.md) - Business logic, transactions, mappers
 - [Controllers](backend/controllers.md) - REST endpoints, HTTP codes, documentation
 - [DTOs](backend/dtos.md) - Data Transfer Objects and validations

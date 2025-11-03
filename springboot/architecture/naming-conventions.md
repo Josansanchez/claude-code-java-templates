@@ -1,20 +1,20 @@
-# Convenciones de Nombres
+# Naming Conventions
 
-## Formato General
+## General Format
 
-**Archivos**: `<Acción><Recurso><Capa>.java` en CamelCase
+**Files**: `<Action><Resource><Layer>.java` in CamelCase
 
-**Directorios**: Siempre en minúsculas (user, product, order, auth, mqtt)
+**Directories**: Always in lowercase (user, product, order, auth, mqtt)
 
 ## Controllers
 
-### Estructura
-- **Directorio**: `controllers/<recurso>/` (Ejemplo: `controllers/user/`, `controllers/auth/`)
-- **Nombre archivo**: `<Acción><Recurso>Controller.java`
-- **Nombre método público**: `<accion><Recurso>` (mismo que la acción del archivo)
-- **Endpoints**: `/api/v1/<recurso>` en minúsculas
+### Structure
+- **Directory**: `controllers/<resource>/` (Example: `controllers/user/`, `controllers/auth/`)
+- **File name**: `<Action><Resource>Controller.java`
+- **Public method name**: `<action><Resource>` (same as file action)
+- **Endpoints**: `/api/v1/<resource>` in lowercase
 
-### Ejemplos
+### Examples
 ```
 controllers/user/CreateUserController.java → createUser()
 controllers/user/GetUserController.java → getUser(code)
@@ -27,12 +27,12 @@ controllers/auth/SignupController.java → signup(request)
 
 ## Services
 
-### Estructura
-- **Directorio**: `services/<recurso>/` (Ejemplo: `services/user/`, `services/auth/`)
-- **Nombre archivo**: `<Acción><Recurso>Service.java`
-- **Nombre método público**: `<accion><Recurso>`
+### Structure
+- **Directory**: `services/<resource>/` (Example: `services/user/`, `services/auth/`)
+- **File name**: `<Action><Resource>Service.java`
+- **Public method name**: `<action><Resource>`
 
-### Ejemplos
+### Examples
 ```
 services/user/CreateUserService.java → createUser(request)
 services/user/GetUserService.java → getUser(code)
@@ -45,39 +45,38 @@ services/mqtt/PublishMqttService.java → publishMqtt(topic, message)
 
 ## Repositories
 
-### Estructura
-- **Directorio**: `repositories/<recurso>/` (Ejemplo: `repositories/user/`)
-- **Nombre**: `<Recurso>Repository.java` (Ejemplo: `UserRepository.java`)
-- **Un repository por recurso** (puede tener múltiples métodos)
+### Structure
+- **Directory**: `repositories/<resource>/` (Example: `repositories/user/`)
+- **Name**: `<Resource>Repository.java` (Example: `UserRepository.java`)
+- **One repository per resource** (can have multiple methods)
 
-### Ejemplos
+### Examples
 ```
 repositories/user/UserRepository.java
 repositories/product/ProductRepository.java
-repositories/user/UserRepository.java
+repositories/order/OrderRepository.java
 ```
 
-### Métodos de Repository
+### Repository Methods
 ```java
 // Spring Data JPA derived queries
 Optional<User> findByCode(String code);
 boolean existsByCode(String code);
 List<User> findByNameContaining(String name);
 
-// Con @Query
-@Query("SELECT h FROM User h WHERE h.code = :code AND h.active = true")
-Optional<User> findActiveByCode(@Param("code") String code);
+// With Specifications (preferred)
+// See UserSpecifications.java for complex queries
 ```
 
 ## DTOs
 
-### Estructura
-- **Directorio**: `dto/` (sin subdirectorios)
-- **Nombre**: `<Recurso>DTO.java` para DTOs estándar
-- **Nombre**: `<Acción><Recurso>Request.java` para requests
-- **Nombre**: `<Acción><Recurso>Response.java` para responses específicas
+### Structure
+- **Directory**: `dto/` (no subdirectories)
+- **Name**: `<Resource>DTO.java` for standard DTOs
+- **Name**: `<Action><Resource>Request.java` for requests
+- **Name**: `<Action><Resource>Response.java` for specific responses
 
-### Ejemplos
+### Examples
 ```
 dto/UserDTO.java
 dto/ProductDTO.java
@@ -90,34 +89,34 @@ dto/ErrorResponse.java
 
 ## Entities
 
-### Estructura
-- **Directorio**: `entities/` (sin subdirectorios)
-- **Nombre**: Singular en inglés (Ejemplo: `User.java`, `Order.java`, `Product.java`)
+### Structure
+- **Directory**: `entities/` (no subdirectories)
+- **Name**: Singular in English (Example: `User.java`, `Order.java`, `Product.java`)
 
-### Ejemplos
+### Examples
 ```
 entities/User.java
 entities/Order.java
 entities/Product.java
-entities/User.java
+entities/Category.java
 entities/Role.java
 entities/Action.java
 ```
 
 ## Mappers
 
-### Estructura
-- **Directorio**: `mappers/`
-- **Nombre**: `<Recurso>Mapper.java`
+### Structure
+- **Directory**: `mappers/`
+- **Name**: `<Resource>Mapper.java`
 
-### Ejemplos
+### Examples
 ```
 mappers/UserMapper.java
 mappers/ProductMapper.java
-mappers/UserMapper.java
+mappers/OrderMapper.java
 ```
 
-### Métodos de Mapper
+### Mapper Methods
 ```java
 UserDTO toDTO(User user);
 User toEntity(CreateUserRequest request);
@@ -126,13 +125,36 @@ List<UserDTO> toDTOList(List<User> users);
 Page<UserDTO> toPageDTO(Page<User> page);
 ```
 
-## Excepciones
+## Specifications
 
-### Estructura
-- **Directorio**: `exceptions/`
-- **Nombre**: `<Tipo>Exception.java`
+### Structure
+- **Directory**: `repositories/<resource>/` (same as repository)
+- **Name**: `<Resource>Specifications.java`
 
-### Ejemplos
+### Examples
+```
+repositories/user/UserRepository.java
+repositories/user/UserSpecifications.java
+repositories/product/ProductRepository.java
+repositories/product/ProductSpecifications.java
+```
+
+### Specification Methods
+```java
+public class UserSpecifications {
+    public static Specification<User> hasCode(String code) { ... }
+    public static Specification<User> nameContains(String keyword) { ... }
+    public static Specification<User> createdAfter(LocalDateTime date) { ... }
+}
+```
+
+## Exceptions
+
+### Structure
+- **Directory**: `exceptions/`
+- **Name**: `<Type>Exception.java`
+
+### Examples
 ```
 exceptions/ResourceNotFoundException.java
 exceptions/ResourceAlreadyExistsException.java
@@ -143,12 +165,12 @@ exceptions/GlobalExceptionHandler.java
 
 ## Tests
 
-### Estructura
-- **Directorio**: `test/java/com/example/myapp/<recurso>/<tipo>/`
-- **Nombre clase**: `<NombreClase>Test.java`
-- **Nombre método**: `shouldXxxWhenYyy()`
+### Structure
+- **Directory**: `test/java/com/example/myapp/<resource>/<type>/`
+- **Class name**: `<ClassName>Test.java`
+- **Method name**: `shouldXxxWhenYyy()`
 
-### Ejemplos
+### Examples
 ```
 test/user/controller/CreateUserControllerTest.java
 test/user/service/CreateUserServiceTest.java
@@ -156,7 +178,7 @@ test/user/repository/UserRepositoryTest.java
 test/integration/UserIntegrationTest.java
 ```
 
-### Métodos de Test
+### Test Methods
 ```java
 shouldCreateUserWhenValidRequest()
 shouldThrowExceptionWhenUserNotFound()
@@ -164,15 +186,15 @@ shouldReturnBadRequestWhenInvalidInput()
 shouldUpdateUserWhenOwner()
 ```
 
-## Constantes
+## Constants
 
-### Estructura
+### Structure
 ```
 constants/Constants.java
 constants/RolesConstants.java
 ```
 
-### Uso
+### Usage
 ```java
 public final class Constants {
     public final class MANDATORY {
@@ -187,34 +209,35 @@ public final class RolesConstants {
 }
 ```
 
-## Configuración
+## Configuration
 
-### Estructura
+### Structure
 ```
 config/OpenApiConfig.java
 config/WebSecurityConfig.java
 config/ModelMapperConfig.java
 ```
 
-## Resumen de Patrones
+## Pattern Summary
 
-| Tipo | Patrón | Ejemplo |
-|------|--------|---------|
-| Controller | `<Acción><Recurso>Controller` | `CreateUserController` |
-| Service | `<Acción><Recurso>Service` | `CreateUserService` |
-| Repository | `<Recurso>Repository` | `UserRepository` |
-| Entity | `<Recurso>` | `User` |
-| DTO | `<Recurso>DTO` | `UserDTO` |
-| Request | `<Acción><Recurso>Request` | `CreateUserRequest` |
-| Mapper | `<Recurso>Mapper` | `UserMapper` |
-| Exception | `<Tipo>Exception` | `ResourceNotFoundException` |
-| Test | `<NombreClase>Test` | `CreateUserServiceTest` |
-| Método Test | `should<Xxx>When<Yyy>` | `shouldCreateUserWhenValid` |
-| Directorio | lowercase | `user`, `auth`, `mqtt` |
+| Type | Pattern | Example |
+|------|---------|---------|
+| Controller | `<Action><Resource>Controller` | `CreateUserController` |
+| Service | `<Action><Resource>Service` | `CreateUserService` |
+| Repository | `<Resource>Repository` | `UserRepository` |
+| Specification | `<Resource>Specifications` | `UserSpecifications` |
+| Entity | `<Resource>` | `User` |
+| DTO | `<Resource>DTO` | `UserDTO` |
+| Request | `<Action><Resource>Request` | `CreateUserRequest` |
+| Mapper | `<Resource>Mapper` | `UserMapper` |
+| Exception | `<Type>Exception` | `ResourceNotFoundException` |
+| Test | `<ClassName>Test` | `CreateUserServiceTest` |
+| Test Method | `should<Xxx>When<Yyy>` | `shouldCreateUserWhenValid` |
+| Directory | lowercase | `user`, `auth`, `mqtt` |
 
-## Regla de Oro
+## Golden Rule
 
-**El nombre del archivo debe reflejar exactamente su único método público**:
-- `CreateUserController.java` tiene el método `createUser()`
-- `GetUserService.java` tiene el método `getUser()`
-- `DeleteProductController.java` tiene el método `deleteProduct()`
+**The file name must exactly reflect its single public method**:
+- `CreateUserController.java` has the method `createUser()`
+- `GetUserService.java` has the method `getUser()`
+- `DeleteProductController.java` has the method `deleteProduct()`

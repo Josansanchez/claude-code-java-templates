@@ -9,15 +9,16 @@ This directory contains reusable Claude Code rule templates for different types 
 Comprehensive rules and best practices for Spring Boot projects with Java.
 
 **Includes:**
-- Architecture guidelines (layers, structure, naming)
+- Architecture guidelines (layers, structure, naming) - **All in English**
 - Backend best practices (entities, services, controllers, DTOs, repositories)
+- **JPA Specifications** for type-safe queries (no @Query or native SQL)
 - Security setup (JWT, authorization, CORS)
 - Error handling patterns
 - Testing conventions (unit, integration)
 - Configuration management
 - API documentation (OpenAPI/Swagger)
 - **Complete Git/GitHub workflow** (branching, commits, PRs, CI/CD)
-- 47 best practices
+- **52 best practices** (updated with Specifications)
 - Feature implementation checklist
 
 **Compatible with:**
@@ -138,10 +139,15 @@ Improvements to templates are welcome:
 ## Template Versions
 
 ### Spring Boot Template
-- **Version**: 2.0.0
-- **Last Updated**: 2025-01-02
+- **Version**: 2.1.0
+- **Last Updated**: 2025-11-03
 - **Compatible with**: Spring Boot 3.x, Java 17+
-- **New**: AI Agents for accelerated development
+- **New in 2.1.0**:
+  - All documentation in English
+  - JPA Specifications for type-safe queries
+  - 52 best practices (added 5 for Specifications)
+  - Comprehensive Specifications guide (855 lines)
+  - Improved architecture documentation
 
 ## Best Practices for Templates
 

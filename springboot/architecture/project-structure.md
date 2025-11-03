@@ -1,10 +1,10 @@
-# Estructura del Proyecto
+# Project Structure
 
-## Organización por Recursos
+## Resource-Based Organization
 
-**IMPORTANTE**: Cada capa debe organizarse por recursos de base de datos en directorios separados.
+**IMPORTANT**: Each layer must be organized by database resources in separate directories.
 
-**TODOS LOS DIRECTORIOS EN MINÚSCULAS**
+**ALL DIRECTORIES IN LOWERCASE**
 
 ```
 src/main/java/com/example/myapp/
@@ -43,15 +43,18 @@ src/main/java/com/example/myapp/
 │       └── PublishMqttService.java
 ├── repositories/
 │   ├── user/
-│   │   └── UserRepository.java
+│   │   ├── UserRepository.java
+│   │   └── UserSpecifications.java
 │   ├── product/
-│   │   └── ProductRepository.java
-│   └── user/
-│       └── UserRepository.java
+│   │   ├── ProductRepository.java
+│   │   └── ProductSpecifications.java
+│   └── order/
+│       ├── OrderRepository.java
+│       └── OrderSpecifications.java
 ├── entities/
 │   ├── User.java
 │   ├── Product.java
-│   └── User.java
+│   └── Order.java
 ├── dto/
 │   ├── UserDTO.java
 │   └── ProductDTO.java
@@ -94,7 +97,7 @@ src/test/java/com/example/myapp/
     └── UserTest.java
 ```
 
-## Recursos
+## Resources
 
 ```
 src/main/resources/
@@ -107,11 +110,12 @@ src/main/resources/
         └── V1__initial_schema.sql
 ```
 
-## Reglas de Organización
+## Organization Rules
 
-1. **Directorios siempre en minúsculas**: user, product, auth, mqtt
-2. **Un recurso = Un directorio** en cada capa
-3. **Funcionalidades especiales** (auth, mqtt) tienen su propio directorio
-4. **Mappers separados** en paquete propio
-5. **Config centralizada** en paquete config
-6. **Excepciones globales** en paquete exceptions
+1. **Directories always in lowercase**: user, product, auth, mqtt
+2. **One resource = One directory** in each layer
+3. **Special features** (auth, mqtt) have their own directory
+4. **Separate mappers** in their own package
+5. **Centralized config** in config package
+6. **Global exceptions** in exceptions package
+7. **Specifications with repositories** in same directory as repository
