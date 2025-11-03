@@ -4,6 +4,36 @@ This directory contains reusable Claude Code rule templates for different types 
 
 ## Available Templates
 
+### Angular Template (`angular/`)
+
+**NEW**: Comprehensive rules and best practices for Angular 17+ projects with TypeScript and standalone components.
+
+**Includes:**
+- Architecture guidelines (layers, structure, naming) - **All in English**
+- Frontend best practices (components, services, forms, routing)
+- **Signals** for reactive state management (Angular 17+)
+- **Standalone Components** architecture (no NgModules)
+- Security (authentication, JWT, guards)
+- State management (signals, computed, effects)
+- Testing conventions (Jasmine/Karma, component testing)
+- Docker deployment (nginx, multi-stage builds)
+- **70+ best practices** (comprehensive coverage)
+
+**Compatible with:**
+- Angular 17+
+- TypeScript 5.2+
+- Standalone Components
+- Signals API
+
+**How to use:**
+```bash
+# Copy to your Angular project
+cp -r angular/ /path/to/your/project/.claude/
+
+# See angular/README.md for detailed instructions
+cat angular/README.md
+```
+
 ### Spring Boot Template (`springboot/`)
 
 Comprehensive rules and best practices for Spring Boot projects with Java.
@@ -121,14 +151,16 @@ agents/
 # Clone the repository
 git clone https://github.com/Josansanchez/claude-code-java-templates.git
 
-# Copy desired template to your project
+# For Spring Boot projects
 cp -r claude-code-java-templates/springboot /path/to/your/project/.claude
-
-# Copy AI agents
 cp -r claude-code-java-templates/agents /path/to/your/project/
+
+# For Angular projects
+cp -r claude-code-java-templates/angular /path/to/your/project/.claude
 
 # Or use degit for cleaner copy (without git history)
 npx degit Josansanchez/claude-code-java-templates/springboot /path/to/your/project/.claude
+npx degit Josansanchez/claude-code-java-templates/angular /path/to/your/project/.claude
 ```
 
 ## Contributing
@@ -168,6 +200,21 @@ Improvements to templates are welcome:
 4. **Consistency**: Maintain consistent style across all documentation
 5. **English Only**: All documentation in English for wider adoption
 6. **Version Control**: Tag template versions and document changes
+
+## Template Versions
+
+### Angular Template
+- **Version**: 1.0.0
+- **Last Updated**: 2025-11-03
+- **Compatible with**: Angular 17+, TypeScript 5.2+
+- **Features**:
+  - ✅ Standalone components architecture
+  - ✅ Angular signals integration
+  - ✅ Modern TypeScript patterns
+  - ✅ Comprehensive testing strategies
+  - ✅ Docker deployment with nginx
+  - ✅ JWT authentication patterns
+  - ✅ 70+ best practices
 
 ## Future Templates (Ideas)
 
