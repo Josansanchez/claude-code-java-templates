@@ -445,6 +445,381 @@ public ResponseEntity<BulkOperationResponse> createUsers(
 Accept: application/vnd.api.v1+json
 ```
 
+## Alternative API Architectures
+
+### When to Use Alternatives to REST
+
+REST is excellent for CRUD operations, but consider these alternatives for specific use cases:
+
+### 1. GraphQL (Flexible Querying)
+
+**Use when:**
+- Clients need different subsets of data (mobile vs web)
+- Multiple round trips would be needed with REST
+- Over-fetching or under-fetching is a problem
+- Real-time subscriptions needed
+
+**Spring Boot GraphQL Implementation:**
+```java
+// Schema definition (schema.graphqls)
+type User {
+    id: ID!
+    username: String!
+    email: String!
+    posts: [Post!]!
+}
+
+type Post {
+    id: ID!
+    title: String!
+    content: String!
+    author: User!
+}
+
+type Query {
+    user(id: ID!): User
+    users(page: Int, size: Int): [User!]!
+}
+
+type Mutation {
+    createUser(input: CreateUserInput!): User!
+}
+
+type Subscription {
+    userCreated: User!
+}
+
+// Controller implementation
+@Controller
+public class UserGraphQLController {
+
+    @Autowired
+    private UserService userService;
+
+    @QueryMapping
+    public User user(@Argument Long id) {
+        return userService.findById(id);
+    }
+
+    @QueryMapping
+    public List<User> users(@Argument int page, @Argument int size) {
+        return userService.findAll(PageRequest.of(page, size)).getContent();
+    }
+
+    @MutationMapping
+    public User createUser(@Argument CreateUserInput input) {
+        return userService.createUser(input);
+    }
+
+    @SubscriptionMapping
+    public Flux<User> userCreated() {
+        return userService.getUserCreatedStream();
+    }
+}
+```
+
+**Dependencies:**
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-graphql</artifactId>
+</dependency>
+```
+
+### 2. WebSockets (Real-time Bidirectional)
+
+**Use when:**
+- Real-time updates required (live notifications, chat)
+- Server needs to push data to clients
+- Low latency is critical
+- Bidirectional communication needed
+
+**Spring Boot WebSocket Implementation:**
+```java
+@Configuration
+@EnableWebSocketMessageBroker
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        config.enableSimpleBroker("/topic", "/queue");
+        config.setApplicationDestinationPrefixes("/app");
+    }
+
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/ws")
+            .setAllowedOrigins("*")
+            .withSockJS();
+    }
+}
+
+@Controller
+public class DeviceStatusController {
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
+    @MessageMapping("/device/status")
+    @SendTo("/topic/device-status")
+    public DeviceStatusMessage handleDeviceStatus(DeviceStatusMessage status) {
+        // Process and broadcast to all subscribers
+        return status;
+    }
+
+    // Server-side push
+    public void notifyDeviceChange(Long deviceId, String status) {
+        DeviceStatusMessage message = new DeviceStatusMessage(deviceId, status);
+        messagingTemplate.convertAndSend("/topic/device-status", message);
+    }
+
+    // User-specific notifications
+    @MessageMapping("/device/control")
+    public void controlDevice(DeviceControlMessage message, Principal principal) {
+        // Send response only to requesting user
+        messagingTemplate.convertAndSendToUser(
+            principal.getName(),
+            "/queue/device-response",
+            deviceService.controlDevice(message)
+        );
+    }
+}
+```
+
+**Use cases for IoT/Domotics:**
+- Real-time sensor readings
+- Device status updates
+- Live home automation events
+- Instant notifications
+
+### 3. gRPC (High Performance Microservices)
+
+**Use when:**
+- High performance required (microservice-to-microservice)
+- Binary protocol needed
+- Strong typing with Protocol Buffers
+- Streaming (client, server, or bidirectional)
+- Language-agnostic service contracts
+
+**gRPC Implementation:**
+```protobuf
+// user-service.proto
+syntax = "proto3";
+
+package com.example.user;
+
+service UserService {
+    rpc GetUser (GetUserRequest) returns (UserResponse);
+    rpc CreateUser (CreateUserRequest) returns (UserResponse);
+    rpc StreamUsers (StreamUsersRequest) returns (stream UserResponse);
+}
+
+message GetUserRequest {
+    int64 id = 1;
+}
+
+message UserResponse {
+    int64 id = 1;
+    string username = 2;
+    string email = 3;
+}
+```
+
+```java
+@GrpcService
+public class UserGrpcService extends UserServiceGrpc.UserServiceImplBase {
+
+    @Autowired
+    private UserService userService;
+
+    @Override
+    public void getUser(GetUserRequest request,
+                        StreamObserver<UserResponse> responseObserver) {
+        User user = userService.findById(request.getId());
+
+        UserResponse response = UserResponse.newBuilder()
+            .setId(user.getId())
+            .setUsername(user.getUsername())
+            .setEmail(user.getEmail())
+            .build();
+
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void streamUsers(StreamUsersRequest request,
+                           StreamObserver<UserResponse> responseObserver) {
+        userService.findAll().forEach(user -> {
+            UserResponse response = UserResponse.newBuilder()
+                .setId(user.getId())
+                .setUsername(user.getUsername())
+                .setEmail(user.getEmail())
+                .build();
+            responseObserver.onNext(response);
+        });
+        responseObserver.onCompleted();
+    }
+}
+```
+
+### 4. Server-Sent Events (SSE) (Simple Real-time)
+
+**Use when:**
+- One-way server-to-client streaming
+- Simpler than WebSockets
+- Text-based data
+- Automatic reconnection needed
+
+**Spring Boot SSE Implementation:**
+```java
+@RestController
+@RequestMapping("/api/v1/events")
+public class EventStreamController {
+
+    @GetMapping(value = "/device-status", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<ServerSentEvent<DeviceStatus>> streamDeviceStatus() {
+        return Flux.interval(Duration.ofSeconds(1))
+            .map(sequence -> ServerSentEvent.<DeviceStatus>builder()
+                .id(String.valueOf(sequence))
+                .event("device-status")
+                .data(deviceService.getCurrentStatus())
+                .build());
+    }
+
+    @GetMapping(value = "/notifications", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter streamNotifications(Principal principal) {
+        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
+
+        notificationService.subscribeToUserNotifications(
+            principal.getName(),
+            notification -> {
+                try {
+                    emitter.send(SseEmitter.event()
+                        .name("notification")
+                        .data(notification));
+                } catch (IOException e) {
+                    emitter.completeWithError(e);
+                }
+            }
+        );
+
+        return emitter;
+    }
+}
+```
+
+### 5. MQTT (IoT Messaging)
+
+**Use when:**
+- IoT devices with limited bandwidth
+- Pub/Sub messaging pattern
+- Quality of Service (QoS) levels needed
+- Large number of devices
+
+**Spring Boot MQTT Integration:**
+```java
+@Configuration
+public class MqttConfig {
+
+    @Bean
+    public MqttPahoClientFactory mqttClientFactory() {
+        DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
+        MqttConnectOptions options = new MqttConnectOptions();
+        options.setServerURIs(new String[] { "tcp://mqtt-broker:1883" });
+        options.setUserName("username");
+        options.setPassword("password".toCharArray());
+        factory.setConnectionOptions(options);
+        return factory;
+    }
+
+    @Bean
+    public MessageChannel mqttInputChannel() {
+        return new DirectChannel();
+    }
+
+    @Bean
+    public MessageProducer inbound() {
+        MqttPahoMessageDrivenChannelAdapter adapter =
+            new MqttPahoMessageDrivenChannelAdapter(
+                "serverIn", mqttClientFactory(),
+                "home/devices/+/status", "home/sensors/+/reading");
+        adapter.setConverter(new DefaultPahoMessageConverter());
+        adapter.setQos(1);
+        adapter.setOutputChannel(mqttInputChannel());
+        return adapter;
+    }
+}
+
+@Component
+public class DeviceMqttHandler {
+
+    @ServiceActivator(inputChannel = "mqttInputChannel")
+    public void handleMessage(Message<String> message) {
+        String topic = message.getHeaders().get("mqtt_receivedTopic", String.class);
+        String payload = message.getPayload();
+
+        if (topic.startsWith("home/devices/")) {
+            deviceService.updateDeviceStatus(payload);
+        } else if (topic.startsWith("home/sensors/")) {
+            sensorService.processSensorReading(payload);
+        }
+    }
+
+    @MessagingGateway(defaultRequestChannel = "mqttOutboundChannel")
+    public interface MqttGateway {
+        void sendToMqtt(String data, @Header(MqttHeaders.TOPIC) String topic);
+    }
+}
+```
+
+## API Architecture Decision Matrix
+
+| Use Case | REST | GraphQL | WebSocket | gRPC | SSE | MQTT |
+|----------|------|---------|-----------|------|-----|------|
+| CRUD Operations | ✅ Best | ⚠️ OK | ❌ | ⚠️ | ❌ | ❌ |
+| Real-time Updates | ❌ | ⚠️ Subscriptions | ✅ Best | ⚠️ Streaming | ✅ Good | ✅ Best for IoT |
+| Mobile Apps | ✅ | ✅ | ⚠️ Battery | ❌ | ⚠️ Battery | ✅ |
+| Microservices | ✅ | ❌ | ❌ | ✅ Best | ❌ | ❌ |
+| Public API | ✅ Best | ✅ Good | ❌ | ❌ | ⚠️ | ❌ |
+| IoT Devices | ❌ | ❌ | ⚠️ | ❌ | ❌ | ✅ Best |
+| Low Bandwidth | ⚠️ | ❌ | ⚠️ | ✅ | ⚠️ | ✅ |
+| Browser Support | ✅ | ✅ | ✅ | ⚠️ gRPC-Web | ✅ | ❌ |
+
+## Hybrid Approach (Recommended)
+
+Combine multiple patterns in the same application:
+
+```java
+@Configuration
+public class ApiConfiguration {
+
+    // REST for CRUD
+    @RestController
+    @RequestMapping("/api/v1/devices")
+    class DeviceRestController { }
+
+    // WebSocket for real-time
+    @Controller
+    class DeviceWebSocketController { }
+
+    // GraphQL for flexible querying
+    @Controller
+    class DeviceGraphQLController { }
+
+    // MQTT for IoT devices
+    @Component
+    class DeviceMqttHandler { }
+}
+```
+
+**Example: Domotics System**
+- **REST**: Device management (CRUD)
+- **WebSocket**: Real-time status updates to dashboard
+- **MQTT**: Communication with IoT sensors/actuators
+- **SSE**: Event notifications to web clients
+- **GraphQL**: Mobile app with flexible data needs
+
 ## Output Format
 
 For each API endpoint, generate:

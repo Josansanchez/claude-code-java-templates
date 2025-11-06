@@ -346,6 +346,130 @@ http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 - API endpoints (prevent DoS)
 ```
 
+### 11. Compliance & Privacy (GDPR, Data Protection)
+
+```java
+// ❌ VULNERABLE: No data anonymization in logs
+log.info("User {} accessed resource {}", user.getEmail(), resource);
+
+// ✅ SECURE: Anonymized logging
+log.info("User {} accessed resource {}", user.getId(), resource);
+
+// ❌ VULNERABLE: No audit trail for personal data access
+@GetMapping("/{id}")
+public UserDTO getUser(@PathVariable Long id) {
+    return userService.findById(id);
+}
+
+// ✅ SECURE: Audit trail for PII access
+@GetMapping("/{id}")
+public UserDTO getUser(@PathVariable Long id, Principal principal) {
+    auditService.logPersonalDataAccess(id, principal.getName(), "USER_READ");
+    return userService.findById(id);
+}
+
+// ❌ VULNERABLE: No data retention policy
+@Entity
+public class User {
+    // Data kept forever
+}
+
+// ✅ SECURE: Soft delete with retention
+@Entity
+@SQLDelete(sql = "UPDATE users SET deleted_at = NOW() WHERE id = ?")
+@Where(clause = "deleted_at IS NULL")
+public class User {
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    @Column(name = "data_retention_until")
+    private LocalDateTime dataRetentionUntil;
+}
+```
+
+**Check for**:
+- ✅ **GDPR Right to be Forgotten**: Ability to delete user data completely
+- ✅ **Consent Management**: Explicit consent for data processing
+- ✅ **Data Portability**: Export user data in machine-readable format
+- ✅ **PII Encryption**: Personal Identifiable Information encrypted at rest
+- ✅ **Audit Trail**: Log access to sensitive personal data
+- ✅ **Data Minimization**: Only collect necessary data
+- ✅ **Retention Policies**: Automatic deletion after retention period
+- ✅ **Anonymization**: Personal data anonymized in logs and analytics
+- ✅ **Privacy by Design**: Privacy considerations in architecture
+- ✅ **Data Breach Notification**: Mechanism to detect and report breaches
+
+### GDPR Implementation Checklist
+
+```java
+// Data Export (Right to Data Portability)
+@GetMapping("/export")
+public ResponseEntity<UserDataExport> exportMyData(Principal principal) {
+    UserDataExport export = gdprService.exportUserData(principal.getName());
+    return ResponseEntity.ok(export);
+}
+
+// Data Deletion (Right to be Forgotten)
+@DeleteMapping("/account")
+public ResponseEntity<Void> deleteMyAccount(Principal principal) {
+    gdprService.anonymizeAndDeleteUser(principal.getName());
+    return ResponseEntity.noContent().build();
+}
+
+// Consent Management
+@Entity
+public class UserConsent {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    private User user;
+
+    @Enumerated(EnumType.STRING)
+    private ConsentType type; // MARKETING, ANALYTICS, THIRD_PARTY
+
+    private Boolean granted;
+
+    @CreationTimestamp
+    private LocalDateTime consentedAt;
+
+    private String ipAddress;
+    private String userAgent;
+}
+
+// Sensitive data encryption
+@Entity
+public class User {
+    @Column(nullable = false)
+    private String email; // Public identifier
+
+    @Convert(converter = EncryptedStringConverter.class)
+    @Column(columnDefinition = "TEXT")
+    private String phoneNumber; // Encrypted PII
+
+    @Convert(converter = EncryptedStringConverter.class)
+    @Column(columnDefinition = "TEXT")
+    private String address; // Encrypted PII
+}
+
+@Converter
+public class EncryptedStringConverter implements AttributeConverter<String, String> {
+    @Autowired
+    private EncryptionService encryptionService;
+
+    @Override
+    public String convertToDatabaseColumn(String attribute) {
+        return encryptionService.encrypt(attribute);
+    }
+
+    @Override
+    public String convertToEntityAttribute(String dbData) {
+        return encryptionService.decrypt(dbData);
+    }
+}
+```
+
 ## Output Format
 
 Provide a detailed security report with:

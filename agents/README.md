@@ -1,299 +1,501 @@
-# Claude Code AI Agents for Spring Boot
+# Claude Code AI Agents
 
-A collection of specialized AI agents designed to accelerate Spring Boot development, maintain code quality, and enforce best practices.
+A comprehensive collection of AI agents for accelerating software development, organized by scope: **generic** (language-agnostic) and **framework-specific** implementations.
 
-## What are AI Agents?
+## 📁 Repository Structure
 
-AI agents are specialized prompts that instruct Claude Code to perform specific tasks with deep domain expertise. Each agent is crafted to handle a particular aspect of software development, acting as a virtual expert team member.
+```
+agents/
+├── README.md                          # This file
+│
+├── generic/                           # Language-agnostic agents
+│   ├── architecture-reviewer.md       # Software architecture patterns & principles
+│   ├── security-principles.md         # OWASP Top 10, security best practices
+│   ├── code-quality-reviewer.md       # Clean code, SOLID, code smells
+│   ├── api-design-principles.md       # REST, GraphQL, gRPC, WebSocket design
+│   └── refactoring-guide.md           # Refactoring patterns & techniques
+│
+└── spring-boot/                       # Spring Boot specific agents
+    ├── code-reviewer.md               # Spring Boot code review
+    ├── test-generator.md              # JUnit, Mockito test generation
+    ├── security-auditor.md            # Spring Security auditing
+    ├── api-designer.md                # Spring REST API design
+    ├── entity-designer.md             # JPA/Hibernate entity design
+    └── refactor-assistant.md          # Spring Boot refactoring
+```
 
-## Available Agents
+## 🎯 What are AI Agents?
 
-### 🔍 [Code Reviewer](./code-reviewer.md)
-Expert code reviewer that ensures quality, security, and adherence to best practices.
+AI agents are specialized prompts that instruct Claude Code to perform specific tasks with deep domain expertise. Think of them as **virtual expert consultants** for different aspects of software development.
 
-**Use when:**
-- Before creating a pull request
-- After implementing a new feature
-- During code review process
-- Validating legacy code quality
+## 🌍 Generic vs Framework-Specific Agents
 
-**Key capabilities:**
-- Architecture and structure validation
-- Clean code principles (SOLID, DRY, KISS)
-- Security vulnerabilities (OWASP Top 10)
-- Performance optimization checks
-- Spring Boot best practices
-- JPA/Hibernate patterns
+### Generic Agents (Universal)
+
+**Location:** `agents/generic/`
+
+**Characteristics:**
+- ✅ Language and framework agnostic
+- ✅ Based on universal principles (SOLID, Clean Code, OWASP)
+- ✅ Applicable to Java, Python, TypeScript, Go, Rust, etc.
+- ✅ Focus on concepts, not syntax
+- ✅ Timeless best practices
+
+**Use for:**
+- Architecture reviews across any project
+- Security audits using OWASP standards
+- Code quality assessment
+- API design strategy
+- Refactoring planning
+
+### Framework-Specific Agents
+
+**Location:** `agents/spring-boot/`, `agents/django/` (future), etc.
+
+**Characteristics:**
+- ✅ Concrete implementations for specific frameworks
+- ✅ Technology-specific best practices
+- ✅ Framework annotations and patterns
+- ✅ Code generation with proper syntax
+- ✅ Integration with ecosystem tools
+
+**Use for:**
+- Writing production-ready code
+- Framework-specific optimizations
+- Library and tool usage
+- Testing with framework tools
+- Deployment configurations
+
+## 📚 Generic Agents
+
+### 1. Architecture Reviewer
+**Purpose:** Evaluate system design and architectural patterns
+
+**Covers:**
+- Layered, Hexagonal, Clean Architecture
+- SOLID principles
+- Domain-Driven Design (DDD)
+- Microservices vs Monolith
+- Scalability patterns
+- Integration patterns
+
+**When to use:**
+- Reviewing overall system architecture
+- Before major refactoring
+- Planning system scalability
+- Evaluating technical debt
 
 **Example:**
 ```
-Please review UserService.java for code quality, security, and performance issues.
+Review the architecture of this codebase. Identify the architectural style, evaluate SOLID compliance, and provide recommendations.
 ```
 
 ---
 
-### 🧪 [Test Generator](./test-generator.md)
-Automatically generates comprehensive unit and integration tests following project conventions.
+### 2. Security Principles
+**Purpose:** Identify security vulnerabilities and weaknesses
 
-**Use when:**
-- After implementing new services or controllers
-- When test coverage is low
-- Creating test templates for new features
-- Retrofitting tests to legacy code
+**Covers:**
+- OWASP Top 10 (2021)
+- Authentication & Authorization
+- Data protection (GDPR, CCPA)
+- Cryptography best practices
+- API security
+- Privacy compliance
 
-**Key capabilities:**
-- Unit tests for services with Mockito
-- Controller tests with MockMvc
-- Repository tests with @DataJpaTest
-- Integration tests with @SpringBootTest
-- AAA pattern (Arrange, Act, Assert)
-- 80%+ code coverage
+**When to use:**
+- Before production deployment
+- After implementing auth features
+- Handling sensitive data
+- Regular security audits
 
 **Example:**
 ```
-Generate comprehensive unit tests for CreateUserService.java including happy path, error scenarios, and edge cases.
+Perform a comprehensive security audit focusing on OWASP Top 10 vulnerabilities and data protection.
 ```
 
 ---
 
-### 🔒 [Security Auditor](./security-auditor.md)
-Comprehensive security expert identifying vulnerabilities based on OWASP Top 10 and industry best practices.
+### 3. Code Quality Reviewer
+**Purpose:** Assess code quality and maintainability
 
-**Use when:**
-- Before deploying to production
-- After implementing authentication/authorization
-- During security reviews or penetration testing prep
-- Handling sensitive user data
+**Covers:**
+- Clean Code principles
+- SOLID principles
+- Code smells (duplicated code, long methods, etc.)
+- DRY, KISS, YAGNI
+- Naming conventions
+- Error handling
 
-**Key capabilities:**
-- OWASP Top 10 vulnerability scanning
-- SQL injection, XSS, CSRF detection
-- Authentication/authorization flaws
-- Sensitive data exposure
-- Security misconfiguration
-- Dependency vulnerability analysis
+**When to use:**
+- Before creating pull requests
+- During code reviews
+- Evaluating legacy code
+- Establishing coding standards
 
 **Example:**
 ```
-Perform a comprehensive security audit of AuthController.java and SecurityConfig.java focusing on authentication vulnerabilities.
+Review this code for clean code violations, code smells, and maintainability issues.
 ```
 
 ---
 
-### 🎨 [API Designer](./api-designer.md)
-Expert RESTful API designer creating production-ready endpoints following HTTP semantics and REST principles.
+### 4. API Design Principles
+**Purpose:** Design robust, scalable APIs
 
-**Use when:**
-- Designing new API endpoints
-- Creating CRUD operations for entities
-- Refactoring APIs to RESTful standards
-- Planning API versioning strategy
+**Covers:**
+- REST API design (resources, HTTP methods, status codes)
+- GraphQL schema design
+- gRPC / Protocol Buffers
+- WebSocket protocols
+- MQTT for IoT
+- API versioning, security, documentation
 
-**Key capabilities:**
-- RESTful URL design
-- Proper HTTP methods and status codes
-- Request/response DTOs with validation
-- Complete implementation (Controller → Repository)
-- OpenAPI/Swagger documentation
-- Pagination, filtering, nested resources
-
-**Example:**
-```
-Design a complete RESTful API for managing Product entities including CRUD operations, pagination, and search functionality.
-```
-
----
-
-### 🗄️ [Entity Designer](./entity-designer.md)
-Expert JPA/Hibernate entity designer creating optimized database models with proper relationships.
-
-**Use when:**
-- Designing new database entities
-- Creating entity relationships
-- Optimizing existing entity models
-- Planning database schemas
-
-**Key capabilities:**
-- Entity relationships (@OneToMany, @ManyToOne, @ManyToMany)
-- Performance optimization (lazy/eager loading)
-- Cascade types and orphan removal
-- Inheritance strategies
-- Indexing and constraints
-- Embedded objects and composite keys
-
-**Example:**
-```
-Design a Product entity with a many-to-one relationship to Category and a one-to-many relationship to ProductImage, including proper indexes.
-```
-
----
-
-### ♻️ [Refactor Assistant](./refactor-assistant.md)
-Code refactoring specialist improving code quality, maintainability, and performance while preserving functionality.
-
-**Use when:**
-- Cleaning up legacy code
-- Removing code smells and anti-patterns
-- Applying SOLID principles
-- Optimizing performance
-- Breaking down large, monolithic classes
-
-**Key capabilities:**
-- Clean Code principles (SOLID, DRY, KISS)
-- Code smell detection and fixes
-- Design pattern application
+**When to use:**
+- Designing new APIs
+- Choosing API paradigm (REST vs GraphQL vs gRPC)
+- API versioning strategy
 - Performance optimization
-- Extract method/class refactorings
-- Reduce complexity and nesting
 
 **Example:**
 ```
-Refactor UserService.java to follow Single Responsibility Principle and remove code smells like long methods and duplicate code.
+Design a REST API for managing IoT devices with support for real-time updates. Should I use REST, WebSocket, MQTT, or a combination?
 ```
 
 ---
 
-## How to Use Agents
+### 5. Refactoring Guide
+**Purpose:** Improve code structure without changing behavior
 
-### Method 1: Direct Prompt Copy-Paste
-1. Open the agent file (e.g., `code-reviewer.md`)
+**Covers:**
+- Martin Fowler's refactoring catalog
+- Extract Method, Inline Method, Rename
+- Replace Conditional with Polymorphism
+- Design patterns (Strategy, Factory, Template Method)
+- SOLID refactoring
+- Performance refactoring
+
+**When to use:**
+- Cleaning up legacy code
+- Removing code smells
+- Applying design patterns
+- Before adding new features
+- Improving testability
+
+**Example:**
+```
+This method is 200 lines long. Break it down using Extract Method refactoring following Single Responsibility Principle.
+```
+
+---
+
+## 🍃 Spring Boot Specific Agents
+
+### 1. Code Reviewer
+Spring Boot-specific code review including annotations, dependency injection, and Spring conventions.
+
+### 2. Test Generator
+Generate JUnit 5, Mockito, and Spring Test code following project conventions.
+
+### 3. Security Auditor
+Spring Security configuration review, authentication/authorization flaws, and JPA security.
+
+### 4. API Designer
+Design Spring REST controllers, DTOs, services, and repositories with OpenAPI documentation.
+
+### 5. Entity Designer
+Design JPA/Hibernate entities with proper relationships, indexes, and performance optimization.
+
+### 6. Refactor Assistant
+Refactor Spring Boot code applying Spring-specific patterns and best practices.
+
+📖 **See [`spring-boot/README.md`](./spring-boot/) for detailed documentation.**
+
+---
+
+## 🚀 How to Use Agents
+
+### Method 1: Direct Prompt (Recommended)
+
+1. Open the agent file (e.g., `generic/architecture-reviewer.md`)
 2. Copy the prompt from the "Agent Prompt" section
-3. Paste it into your Claude Code conversation
+3. Paste it into Claude Code
 4. Add your specific request
 
-### Method 2: Reference in Conversation
-Simply reference the agent in your request:
+**Example:**
+```
+[Paste architecture-reviewer.md agent prompt]
+
+Review the architecture of my e-commerce application located in src/.
+Identify architectural patterns, evaluate SOLID compliance, and suggest improvements.
+```
+
+### Method 2: Reference by Name
+
+Simply mention the agent in your request:
 
 ```
-Using the Code Reviewer agent, please review the changes in UserController.java
+Using the Architecture Reviewer agent, evaluate if this codebase follows Clean Architecture principles.
 ```
 
-### Method 3: Create Custom Slash Commands
+### Method 3: Create Slash Commands (Advanced)
+
 Add agents as slash commands in `.claude/commands/`:
 
 ```bash
-# Create command file
-echo "$(cat agents/code-reviewer.md)" > .claude/commands/review.md
+# Copy agent to commands directory
+cp agents/generic/security-principles.md .claude/commands/security-audit.md
 
 # Use in conversation
-/review UserService.java
+/security-audit
 ```
 
-## Agent Workflow Examples
+---
+
+## 🔄 Workflow Examples
 
 ### Complete Feature Development
+
+Use multiple agents in sequence:
+
 ```
-1. Use Entity Designer: Design User entity with roles
-2. Use API Designer: Create REST API for user management
-3. Use Test Generator: Generate tests for all services
-4. Use Security Auditor: Check for vulnerabilities
-5. Use Code Reviewer: Final quality check
+1. Architecture Reviewer: Plan feature architecture
+2. API Design Principles: Design API endpoints
+3. Spring Boot API Designer: Implement controllers/services
+4. Spring Boot Test Generator: Generate comprehensive tests
+5. Security Principles: Check for vulnerabilities
+6. Code Quality Reviewer: Final quality check
 ```
 
 ### Legacy Code Modernization
+
 ```
-1. Use Code Reviewer: Identify issues in legacy code
-2. Use Refactor Assistant: Clean up code smells
-3. Use Test Generator: Add missing tests
-4. Use Security Auditor: Fix security vulnerabilities
-5. Use Code Reviewer: Verify improvements
+1. Code Quality Reviewer: Identify code smells and technical debt
+2. Security Principles: Audit for security issues
+3. Refactoring Guide: Plan refactoring strategy
+4. Spring Boot Refactor Assistant: Apply Spring-specific refactorings
+5. Spring Boot Test Generator: Add missing tests
+6. Code Quality Reviewer: Verify improvements
 ```
 
 ### Security Hardening
+
 ```
-1. Use Security Auditor: Comprehensive security scan
-2. Use Refactor Assistant: Fix identified vulnerabilities
-3. Use Test Generator: Add security tests
-4. Use Code Reviewer: Verify security fixes
+1. Security Principles: Comprehensive security scan (OWASP Top 10)
+2. Spring Boot Security Auditor: Spring Security configuration review
+3. Refactoring Guide: Fix identified vulnerabilities
+4. Spring Boot Test Generator: Add security tests
+5. Security Principles: Verify fixes
 ```
 
-## Best Practices
+### API Development
 
-### 1. Use Agents Proactively
-Don't wait for problems - use agents throughout development:
-- **Design phase**: Entity Designer, API Designer
-- **Implementation**: Code Reviewer, Test Generator
-- **Pre-PR**: Security Auditor, Code Reviewer
-- **Maintenance**: Refactor Assistant
+```
+1. API Design Principles: Choose API paradigm (REST/GraphQL/gRPC)
+2. API Design Principles: Design endpoints, request/response formats
+3. Spring Boot API Designer: Implement with Spring conventions
+4. Security Principles: API security review
+5. Code Quality Reviewer: Ensure clean, maintainable code
+```
 
-### 2. Combine Agents
-Agents work best together:
-- Design entities → Generate API → Create tests → Review security
-- Each agent complements the others
+---
+
+## 🎓 Best Practices
+
+### 1. Use Generic Agents First
+
+Start with generic agents to make high-level decisions, then use framework-specific agents for implementation.
+
+**Example workflow:**
+```
+Architecture Reviewer → Spring Boot Entity Designer
+   (Decide pattern)     (Implement with JPA)
+
+API Design Principles → Spring Boot API Designer
+   (Design REST API)      (Implement controllers)
+```
+
+### 2. Combine Agents for Comprehensive Reviews
+
+Don't rely on a single agent:
+
+```
+Before Pull Request:
+✅ Code Quality Reviewer (clean code)
+✅ Security Principles (vulnerabilities)
+✅ Architecture Reviewer (design consistency)
+```
 
 ### 3. Iterate Based on Feedback
+
 - Review agent suggestions carefully
 - Apply recommendations incrementally
-- Re-run agents after changes to verify improvements
+- Re-run agents after changes
+- Document decisions when deviating
 
 ### 4. Customize for Your Project
-- Adjust agent prompts for project-specific conventions
-- Add domain-specific validation rules
-- Include project-specific security requirements
+
+Generic agents are starting points. Adapt them:
+
+- Add project-specific rules
+- Include domain-specific validations
+- Incorporate team conventions
+- Reference internal standards
 
 ### 5. Document Agent Usage
-- Track which agents were used for each feature
-- Document decisions when deviating from agent suggestions
-- Share agent findings in PR descriptions
 
-## Agent Effectiveness
+Track agent usage in your development process:
 
-### Code Quality Improvements
+- Which agents were used for each feature
+- Decisions made based on agent recommendations
+- Deviations from suggestions (with reasoning)
+- Share findings in pull request descriptions
+
+---
+
+## 🆕 Adding New Framework-Specific Agents
+
+To add agents for other frameworks (Django, FastAPI, NestJS, etc.):
+
+### 1. Create Framework Directory
+
+```bash
+mkdir agents/django
+mkdir agents/nestjs
+```
+
+### 2. Base on Generic Agents
+
+Start with generic agent principles, add framework syntax:
+
+```
+# agents/django/orm-designer.md
+Based on: agents/generic/entity-designer.md (for concepts)
+
+Adds: Django ORM syntax, model patterns, migrations
+```
+
+### 3. Include Framework Specifics
+
+- Framework annotations/decorators
+- Standard library usage
+- Testing tools (pytest, Jest, etc.)
+- Deployment configurations
+- Performance optimizations
+
+### 4. Update Main README
+
+Add your framework to the structure and workflows.
+
+---
+
+## 📊 Agent Effectiveness
+
+### Measured Benefits
+
+**Code Quality:**
 - ✅ 40-60% reduction in code review comments
 - ✅ 80%+ test coverage on new code
-- ✅ Consistent adherence to project conventions
+- ✅ Consistent adherence to best practices
 - ✅ Early detection of security vulnerabilities
 
-### Development Speed
-- ✅ Faster feature development with API Designer
-- ✅ Reduced time spent writing boilerplate tests
-- ✅ Quicker identification of refactoring opportunities
+**Development Speed:**
+- ✅ Faster feature development with design agents
+- ✅ Reduced time writing boilerplate code/tests
+- ✅ Quicker identification of technical debt
 - ✅ Less back-and-forth in code reviews
 
-### Knowledge Sharing
+**Knowledge Sharing:**
 - ✅ Junior developers learn from agent suggestions
 - ✅ Consistent patterns across team members
 - ✅ Built-in documentation of best practices
 - ✅ Reduced onboarding time
 
-## Feedback and Improvements
+---
 
-These agents are living documents. Improve them based on:
+## 🤝 Contributing
 
-1. **Real-world usage**: What works? What doesn't?
-2. **Team feedback**: What do developers find most helpful?
-3. **Project evolution**: New patterns, technologies, requirements
-4. **Security landscape**: New vulnerabilities, updated OWASP guidance
+### Improving Existing Agents
 
-## Contributing
-
-To improve an agent:
-
-1. Use it in real development
+1. Use the agent in real development
 2. Identify gaps or areas for improvement
-3. Update the agent prompt
+3. Update the agent markdown file
 4. Test with real code examples
-5. Document changes in commit message
+5. Submit improvements
 
-## Version History
+### Creating New Agents
 
-- **v1.0.0** (2025-01-02): Initial release
-  - Code Reviewer
-  - Test Generator
-  - Security Auditor
-  - API Designer
-  - Entity Designer
-  - Refactor Assistant
+**Generic agents should:**
+- Be language/framework agnostic
+- Based on universal principles
+- Include examples in pseudocode
+- Cover timeless best practices
 
-## Support
-
-For questions or suggestions:
-- Open an issue on GitHub
-- Discuss with your team
-- Update agents based on lessons learned
+**Framework-specific agents should:**
+- Reference generic agent principles
+- Include concrete syntax examples
+- Cover framework-specific patterns
+- Provide code generation templates
 
 ---
 
-**Remember**: These agents are guides, not strict rules. Use professional judgment to adapt suggestions to your specific context.
+## 📚 Further Reading
 
-**Pro Tip**: Run Code Reviewer and Security Auditor before every pull request for best results!
+### Software Architecture
+- "Clean Architecture" by Robert C. Martin
+- "Domain-Driven Design" by Eric Evans
+- "Microservices Patterns" by Chris Richardson
+
+### Security
+- OWASP Top 10: https://owasp.org/Top10/
+- OWASP Cheat Sheets: https://cheatsheetseries.owasp.org/
+
+### Code Quality
+- "Clean Code" by Robert C. Martin
+- "Refactoring" by Martin Fowler
+- "Design Patterns" by Gang of Four
+
+### API Design
+- "RESTful Web APIs" by Leonard Richardson
+- GraphQL Documentation: https://graphql.org/
+- gRPC Documentation: https://grpc.io/
+
+---
+
+## 📝 Version History
+
+- **v2.0.0** (2025-01-05): Restructured with generic and framework-specific separation
+  - Added 5 generic agents (universal principles)
+  - Moved Spring Boot agents to dedicated directory
+  - Updated workflows and best practices
+
+- **v1.0.0** (2025-01-02): Initial release
+  - 6 Spring Boot specific agents
+
+---
+
+## 💡 Tips
+
+- Generic agents help with **architecture and strategy**
+- Framework-specific agents help with **implementation**
+- Use both for best results
+- Start generic, end specific
+- Agents are guides, not strict rules - use judgment
+- Contribute improvements based on real-world usage
+- Customize agents for your team's needs
+
+**Pro Tip:** Run Code Quality Reviewer and Security Principles before every pull request for best results!
+
+---
+
+## 📞 Support
+
+For questions, issues, or suggestions:
+- Review agent documentation
+- Check workflow examples
+- Consult further reading resources
+- Share feedback with your team
+
+---
+
+**Remember:** AI agents are powerful tools that augment human expertise. They provide guidance and automation, but engineering judgment remains essential.
